@@ -161,4 +161,3 @@ createNewObject("dor", "AyayaAdd", 215);
 createNewObject("dez", "AyayaAdd", 215);
 createNewObject("ruc", "AyayaAdd", 215);
 createNewObject("vec", "AyayaAdd", 215);
-createNewObject();
