@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  background-color: indigo;
+}
+
+h1 {
+  margin: 0;
+  font-size: 4rem;
+  cursor: cell;
+  transition: 1s;
+}
+.animation--fade-in--left {
+  animation: showArticlesLeft 2s;
+}
+@keyframes showArticlesLeft {
+  from {
+    transform: translateX(200px);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+span {
+  cursor: default;
+  color: indigo;
+  transition: 1s;
+}
+.animation--fade-in--right {
+  animation: showArticlesRight 2s;
+}
+@keyframes showArticlesRight {
+  from {
+    transform: translateX(-200px);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateX(0);
+
+    opacity: 1;
+  }
+}
+.animation--fade-in--bottom {
+  animation-delay: 1;
+  animation: showArticlesBottom 1.5s;
+  animation-timing-function: ease-in-out;
+}
+@keyframes showArticlesBottom {
+  from {
+    transition-delay: 2;
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+
+    opacity: 0.5;
+  }
+}
+.filler {
+  overflow: hidden;
+  opacity: 0.5;
+}
+article {
+  display: flex;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  text-align: justify;
+  font-weight: bolder;
+  font-size: 2rem;
+}
+section {
+  display: none;
+  transition: 1s;
+}
+
+section.section__display--on {
+  display: block;
+}
+
+.big-container {
+  background-color: indianred;
+  width: 800px;
+  margin: auto;
+}
+.big-container div {
+  cursor: cell;
+  display: flex;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+}
+.big-container div:hover h1 {
+  z-index: 2;
+  font-size: 6rem;
+  transition: 1s;
+  color: white;
+}
+.big-container__nap {
+  background-color: rgb(68, 21, 4);
+}
+.big-container__dor {
+  background-color: rgb(5, 70, 5);
+}
+.big-container__ruc {
+  background-color: darkblue;
+}
+.big-container__vec {
+  background-color: rgb(1, 63, 1);
+}
+.big-container__dez {
+  background-color: rgb(4, 61, 4);
+}
+.big-container div:hover {
+  background-color: grey;
+}
