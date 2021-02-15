@@ -5,9 +5,12 @@ body {
 
 h1 {
   margin: 0;
+  font-size: 4rem;
+  cursor: cell;
+  transition: 1s;
 }
 .animation--fade-in--left {
-  animation: showArticlesLeft 3s;
+  animation: showArticlesLeft 2s;
 }
 @keyframes showArticlesLeft {
   from {
@@ -19,9 +22,13 @@ h1 {
     opacity: 1;
   }
 }
-
+span {
+  cursor: default;
+  color: indigo;
+  transition: 1s;
+}
 .animation--fade-in--right {
-  animation: showArticlesRight 3s;
+  animation: showArticlesRight 2s;
 }
 @keyframes showArticlesRight {
   from {
@@ -34,9 +41,38 @@ h1 {
     opacity: 1;
   }
 }
+.animation--fade-in--bottom {
+  animation-delay: 1;
+  animation: showArticlesBottom 1.5s;
+  animation-timing-function: ease-in-out;
+}
+@keyframes showArticlesBottom {
+  from {
+    transition-delay: 2;
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
 
+    opacity: 0.5;
+  }
+}
+.filler {
+  overflow: hidden;
+  opacity: 0.5;
+}
+article {
+  display: flex;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  text-align: justify;
+  font-weight: bolder;
+  font-size: 2rem;
+}
 section {
   display: none;
+  transition: 1s;
 }
 
 section.section__display--on {
@@ -49,11 +85,17 @@ section.section__display--on {
   margin: auto;
 }
 .big-container div {
+  cursor: cell;
   display: flex;
   height: 100px;
   align-items: center;
   justify-content: center;
-  transition-duration: 1s;
+}
+.big-container div:hover h1 {
+  z-index: 2;
+  font-size: 6rem;
+  transition: 1s;
+  color: white;
 }
 .big-container__nap {
   background-color: rgb(68, 21, 4);

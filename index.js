@@ -4,7 +4,8 @@ const doc = document;
 const mainContainer = doc.querySelector(".big-container");
 const allSections = doc.querySelectorAll(".article-container");
 const [nap, dor, ruc, vec, dez] = ["nap", "dor", "ruc", "vec", "dez"];
-
+let allArticles = [];
+let userAddedArticles = [];
 const defaultArticles = [
   {
     articleType: dor,
@@ -13,8 +14,8 @@ const defaultArticles = [
   },
   {
     articleType: ruc,
-    articleName: "articleName",
-    articlePrice: 255.99,
+    articleName: "MICA GEJ",
+    articlePrice: 420.69,
   },
   {
     articleType: vec,
@@ -36,9 +37,53 @@ const defaultArticles = [
     articleName: "articleName",
     articlePrice: 255.99,
   },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
+  {
+    articleType: dez,
+    articleName: "articleName",
+    articlePrice: 255.99,
+  },
 ];
-const AllArticles = [...defaultArticles];
 
+function updateAllArticles() {
+  allArticles = [...defaultArticles, ...userAddedArticles];
+}
+updateAllArticles();
+
+let createNewObject = function (nAT, naN, nAP) {
+  let newObj = Object.create(null);
+  // tip artikla
+  newObj.articleType = nAT;
+  // ime artikla
+  newObj.articleName = naN;
+  // cena artikla
+  newObj.articlePrice = nAP;
+  allArticles.push(newObj);
+};
 // IIFE za dodeljivanje eventova
 (function () {
   // Adds event to clicks on <main> element
@@ -57,10 +102,8 @@ const AllArticles = [...defaultArticles];
   // Funkcija za skidanje klasa sa svih naslova
   // i 'togglovanje' klase na trenutno pritisnutom naslovu
   const toggleDisplayClasses = function (selected, selectedSection) {
-    console.log(selected);
     allSections.forEach((sec) => {
       if (sec !== selectedSection) sec.classList.remove("section__display--on");
-      console.log(sec, selected);
     });
     // kreira html koji ce biti prikazan
     if (!selectedSection.classList.contains("section__display--on")) {
@@ -80,7 +123,7 @@ const AllArticles = [...defaultArticles];
 
   const getArticlesOfType = function (type) {
     const arrayOfType = [];
-    AllArticles.forEach(
+    allArticles.forEach(
       (art) => art.articleType === type && arrayOfType.push(art)
     );
     return arrayOfType;
@@ -88,17 +131,33 @@ const AllArticles = [...defaultArticles];
 
   const generateHTML = function (objekatArtikal) {
     return `<article class="artikal--${objekatArtikal.articleType}">
-    <span>${objekatArtikal.articleName}</span>
-    <span>${objekatArtikal.articlePrice}</span>
+    <span class="item1">${objekatArtikal.articleName}</span>
+    <span class="filler">.........................................................................................................................................................................................................</span>
+    <span class="item2">${objekatArtikal.articlePrice}</span>
     </article>`;
   };
   const displayArticlesAnimate = function (articlesArray) {
-    articlesArray.forEach((article, i) => {
-      i % 2 === 0
-        ? article.classList.add("animation--fade-in--left")
-        : article.classList.add("animation--fade-in--right");
+    // articlesArray.forEach((article, i) => {
+    //   i % 2 === 0
+    //     ? article.classList.add("animation--fade-in--left")
+    //     : article.classList.add("animation--fade-in--right");
+    // });
+    articlesArray.forEach((article) => {
+      article
+        .querySelector(".item1")
+        .classList.add("animation--fade-in--right");
+      article.querySelector(".item2").classList.add("animation--fade-in--left");
+      article
+        .querySelector(".filler")
+        .classList.add("animation--fade-in--bottom");
     });
     //   articlesArray[0].classList.add("animation--fade-in--left");
     //   articlesArray[2].classList.add("animation--fade-in--right");
   };
 })();
+
+createNewObject("nap", "AyayaAdd", 215);
+createNewObject("dor", "AyayaAdd", 215);
+createNewObject("dez", "AyayaAdd", 215);
+createNewObject("ruc", "AyayaAdd", 215);
+createNewObject("vec", "AyayaAdd", 215);
