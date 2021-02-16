@@ -1,80 +1,22 @@
-console.log("blin");
+console.log("Blin, it started the script");
 
 const doc = document;
 const mainContainer = doc.querySelector(".big-container");
 const allSections = doc.querySelectorAll(".article-container");
+const allMainDivs = doc.querySelectorAll("main div");
+const modalOverlay = doc.querySelector(".modal--overlay");
+const btnSubmit = doc.querySelector(".submit--modal");
 const [nap, dor, ruc, vec, dez] = ["nap", "dor", "ruc", "vec", "dez"];
 let allArticles = [];
-let userAddedArticles = [];
-const defaultArticles = [
-  {
-    articleType: dor,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: ruc,
-    articleName: "MICA GEJ",
-    articlePrice: 420.69,
-  },
-  {
-    articleType: vec,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: nap,
-    articleName: "arwerwerwerewrme",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dor,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-  {
-    articleType: dez,
-    articleName: "articleName",
-    articlePrice: 255.99,
-  },
-];
+let userAddedArticles =
+  JSON.parse(localStorage.getItem("userAddedArticles")) || [];
 
 function updateAllArticles() {
-  allArticles = [...defaultArticles, ...userAddedArticles];
+  allArticles = [...userAddedArticles];
 }
 updateAllArticles();
 
-let createNewObject = function (nAT, naN, nAP) {
+const createNewObject = function (nAT, naN, nAP, userGenerated = false) {
   let newObj = Object.create(null);
   // tip artikla
   newObj.articleType = nAT;
@@ -82,16 +24,25 @@ let createNewObject = function (nAT, naN, nAP) {
   newObj.articleName = naN;
   // cena artikla
   newObj.articlePrice = nAP;
+  newObj.userGenerate = userGenerated;
   allArticles.push(newObj);
+  if (userGenerated) userAddedArticles.push(newObj);
+  localStorage.setItem("userAddedArticles", JSON.stringify(userAddedArticles));
 };
+
 // IIFE za dodeljivanje eventova
 (function () {
   // Adds event to clicks on <main> element
   mainContainer.addEventListener("click", function (e) {
     // Selektujemo trenutno izabrani tip obroka
-    const selected = e.target.closest(".big-container__section");
+    let selected = e.target.closest(".big-container__section");
     // Making sure user clicked on one of the sections
-    if (!selected) return;
+    if (!selected) {
+      selected = e.target.closest(".big-container__create-has");
+      if (!selected) return;
+      modalOverlay.classList.remove("modal--hidden");
+      return;
+    }
     // Kontejner artikala odabranog tipa
     const selectedSection = doc.querySelector(
       `.article-container--${selected.dataset.val}`
@@ -99,16 +50,53 @@ let createNewObject = function (nAT, naN, nAP) {
     toggleDisplayClasses(selected, selectedSection);
   });
 
+  modalOverlay.addEventListener("click", function (e) {
+    if (e.target.closest(".close--modal")) {
+      modalOverlay.classList.add("modal--hidden");
+      return;
+    }
+    if (!e.target.closest(".modal"))
+      modalOverlay.classList.add("modal--hidden");
+  });
+
+  allMainDivs.forEach((div, i) => {
+    i % 2 === 0
+      ? (div.style.backgroundColor = "rgb(8, 64, 96)")
+      : (div.style.backgroundColor = "rgb(16, 96, 96)");
+  });
+
+  const clearModal = function () {
+    modalOverlay.querySelector(".input--type").value = "nap";
+    modalOverlay.querySelector(".input--name").value = "";
+    modalOverlay.querySelector(".input--price").value = "";
+  };
+
+  btnSubmit.addEventListener("click", function (e) {
+    e.preventDefault();
+    const artType = modalOverlay.querySelector(".input--type").value;
+    const artName = modalOverlay.querySelector(".input--name").value;
+    const artPrice = modalOverlay.querySelector(".input--price").value;
+    if (!artName || !artPrice) clearModal();
+    else {
+      createNewObject(artType, artName, Number(artPrice), true);
+      clearModal();
+    }
+    modalOverlay.classList.add("modal--hidden");
+  });
+
   // Funkcija za skidanje klasa sa svih naslova
   // i 'togglovanje' klase na trenutno pritisnutom naslovu
   const toggleDisplayClasses = function (selected, selectedSection) {
     allSections.forEach((sec) => {
-      if (sec !== selectedSection) sec.classList.remove("section__display--on");
+      if (sec !== selectedSection) {
+        sec.innerHTML = "";
+        sec.classList.remove("section__display--on");
+      }
     });
     // kreira html koji ce biti prikazan
     if (!selectedSection.classList.contains("section__display--on")) {
       displayArticles(selected.dataset.val);
-    }
+    } else selectedSection.innerHTML = "";
     selectedSection.classList.toggle("section__display--on");
   };
 
@@ -126,6 +114,15 @@ let createNewObject = function (nAT, naN, nAP) {
     allArticles.forEach(
       (art) => art.articleType === type && arrayOfType.push(art)
     );
+    (function () {
+      if (allArticles.length === 0) {
+        createNewObject("nap", "Default Napitak", 1337);
+        createNewObject("dor", "Default Dorucak", 1337);
+        createNewObject("dez", "Default Dezert", 1337);
+        createNewObject("ruc", "Default Rucak", 1337);
+        createNewObject("vec", "Default Vecera", 1337);
+      }
+    })();
     return arrayOfType;
   };
 
@@ -133,15 +130,10 @@ let createNewObject = function (nAT, naN, nAP) {
     return `<article class="artikal--${objekatArtikal.articleType}">
     <span class="item1">${objekatArtikal.articleName}</span>
     <span class="filler">.........................................................................................................................................................................................................</span>
-    <span class="item2">${objekatArtikal.articlePrice}</span>
+    <span class="item2">${objekatArtikal.articlePrice.toFixed(2)}</span>
     </article>`;
   };
   const displayArticlesAnimate = function (articlesArray) {
-    // articlesArray.forEach((article, i) => {
-    //   i % 2 === 0
-    //     ? article.classList.add("animation--fade-in--left")
-    //     : article.classList.add("animation--fade-in--right");
-    // });
     articlesArray.forEach((article) => {
       article
         .querySelector(".item1")
@@ -151,13 +143,8 @@ let createNewObject = function (nAT, naN, nAP) {
         .querySelector(".filler")
         .classList.add("animation--fade-in--bottom");
     });
-    //   articlesArray[0].classList.add("animation--fade-in--left");
-    //   articlesArray[2].classList.add("animation--fade-in--right");
   };
 })();
 
-createNewObject("nap", "AyayaAdd", 215);
-createNewObject("dor", "AyayaAdd", 215);
-createNewObject("dez", "AyayaAdd", 215);
-createNewObject("ruc", "AyayaAdd", 215);
-createNewObject("vec", "AyayaAdd", 215);
+// localStorage.clear();
+console.log("Blin, it's the end of the script");
