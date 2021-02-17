@@ -7,6 +7,8 @@ console.log("Blin, it started the script");
   const allSections = doc.querySelectorAll(".article-container");
 
   const btnSubmit = doc.querySelector(".submit--modal");
+  const btnRemoveOne = doc.querySelector(".remove-one--modal");
+  const btnRemoveAll = doc.querySelector(".remove-all--modal");
   const [nap, dor, ruc, vec, dez] = ["nap", "dor", "ruc", "vec", "dez"];
   let allArticles = [];
   let userAddedArticles =
@@ -28,10 +30,7 @@ console.log("Blin, it started the script");
     newObj.userGenerate = userGenerated;
     allArticles.push(newObj);
     if (userGenerated) userAddedArticles.push(newObj);
-    localStorage.setItem(
-      "userAddedArticles",
-      JSON.stringify(userAddedArticles)
-    );
+    updateLocalStorage(userAddedArticles);
     allSections.forEach((sec) => {
       sec.innerHTML = "";
       sec.classList.remove("section__display--on");
@@ -52,21 +51,47 @@ console.log("Blin, it started the script");
   // Adds event to clicks on <main> element
   const mainContainer = doc.querySelector(".big-container");
   const modalOverlay = doc.querySelector(".modal--overlay");
+  const noContentSpanArray = mainContainer.querySelectorAll(`.no-content`);
 
   mainContainer.addEventListener("click", function (e) {
+    // hides all no content texts
+    noContentSpanArray.forEach((el) => el.classList.add("hidden"));
+
     // Selektujemo trenutno izabrani tip obroka
     let selectedDiv = e.target.closest(".big-container__section");
+
+    const removeDisplayAll = function () {
+      allSections.forEach((sec) => {
+        sec.innerHTML = "";
+        sec.classList.remove("section__display--on");
+      });
+    };
+
     // Making sure user clicked on one of the sections
     if (!selectedDiv) {
       selectedDiv = e.target.closest(".big-container__create-has");
-      if (!selectedDiv) return;
+      const selectedSection = doc.querySelector(
+        `.article-container--${selectedDiv.dataset.val}`
+      );
+      if (!selectedDiv) {
+        removeDisplayAll();
+        return;
+      }
+      removeDisplayAll();
       modalOverlay.classList.remove("modal--hidden");
+
       return;
     }
-    // Kontejner artikala odabranog tipa
     const selectedSection = doc.querySelector(
       `.article-container--${selectedDiv.dataset.val}`
     );
+    allSections.forEach((sec) => {
+      if (sec !== selectedSection) {
+        sec.innerHTML = "";
+        sec.classList.remove("section__display--on");
+      }
+    });
+
     toggleDisplayClasses(selectedDiv, selectedSection);
   });
 
@@ -74,6 +99,7 @@ console.log("Blin, it started the script");
     modalOverlay.querySelector(".input--type").value = "nap";
     modalOverlay.querySelector(".input--name").value = "";
     modalOverlay.querySelector(".input--price").value = "";
+    modalOverlay.querySelector(".input--remove-one").value = "";
   };
 
   // Event listener for closing modal screen
@@ -97,15 +123,34 @@ console.log("Blin, it started the script");
     modalOverlay.classList.add("modal--hidden");
   });
 
+  btnRemoveOne.addEventListener("click", function () {
+    const imeObroka = modalOverlay.querySelector(".input--remove-one").value;
+    let indexOf;
+    indexOf = userAddedArticles.indexOf(
+      userAddedArticles.find((art) => art.articleName === imeObroka)
+    );
+    userAddedArticles.splice(indexOf, 1);
+    updateAllArticles();
+    updateLocalStorage(userAddedArticles);
+    clearModal();
+    modalOverlay.classList.add("modal--hidden");
+  });
+  const updateLocalStorage = function (array) {
+    localStorage.setItem("userAddedArticles", JSON.stringify(array));
+  };
+
+  btnRemoveAll.addEventListener("click", function () {
+    userAddedArticles = [];
+    updateAllArticles();
+    updateLocalStorage(userAddedArticles);
+
+    clearModal();
+    modalOverlay.classList.add("modal--hidden");
+  });
+
   // Funkcija za skidanje klasa sa svih naslova
   // i 'togglovanje' klase na trenutno pritisnutom naslovu
   const toggleDisplayClasses = function (selectedDiv, selectedSection) {
-    allSections.forEach((sec) => {
-      if (sec !== selectedSection) {
-        sec.innerHTML = "";
-        sec.classList.remove("section__display--on");
-      }
-    });
     // kreira html koji ce biti prikazan
     if (!selectedSection.classList.contains("section__display--on")) {
       displayArticles(selectedDiv.dataset.val);
@@ -115,6 +160,12 @@ console.log("Blin, it started the script");
 
   const displayArticles = function (type) {
     const arrayofType = getArticlesOfType(type);
+    if (arrayofType.length === 0) {
+      mainContainer
+        .querySelector(`.hidden--${type}`)
+        .classList.remove("hidden");
+      return;
+    }
     let articlesAllHTML = "";
     arrayofType.forEach(
       (article) => (articlesAllHTML += generateHTML(article))
@@ -131,15 +182,7 @@ console.log("Blin, it started the script");
     allArticles.forEach(
       (art) => art.articleType === type && arrayOfType.push(art)
     );
-    (function () {
-      if (allArticles.length === 0) {
-        createNewObject("nap", "Default Napitak", 1337);
-        createNewObject("dor", "Default Dorucak", 1337);
-        createNewObject("dez", "Default Dezert", 1337);
-        createNewObject("ruc", "Default Rucak", 1337);
-        createNewObject("vec", "Default Vecera", 1337);
-      }
-    })();
+
     return arrayOfType;
   };
 

@@ -13,22 +13,27 @@
     <main class="big-container">
       <div data-val="nap" class="big-container__nap big-container__section">
         <h1>NAPITKI</h1>
+        <span class="no-content hidden--nap hidden">(nema sadrzaja)</span>
       </div>
       <section class="article-container--nap article-container"></section>
       <div data-val="dor" class="big-container__dor big-container__section">
         <h1>DORUCAK</h1>
+        <span class="no-content hidden--dor hidden">(nema sadrzaja)</span>
       </div>
       <section class="article-container--dor article-container"></section>
       <div data-val="ruc" class="big-container__ruc big-container__section">
         <h1>RUCAK</h1>
+        <span class="no-content hidden--ruc hidden">(nema sadrzaja)</span>
       </div>
       <section class="article-container--ruc article-container"></section>
       <div data-val="vec" class="big-container__vec big-container__section">
         <h1>VECERA</h1>
+        <span class="no-content hidden--vec hidden">(nema sadrzaja)</span>
       </div>
       <section class="article-container--vec article-container"></section>
       <div data-val="dez" class="big-container__dez big-container__section">
         <h1>DEZERT</h1>
+        <span class="no-content hidden--dez hidden">(nema sadrzaja)</span>
       </div>
       <section class="article-container--dez article-container"></section>
       <div class="big-container__create-has">
@@ -59,8 +64,19 @@
           id=""
           placeholder="Cena obroka"
         />
-        <button type="submit" class="submit--modal btn">
-          Ubaci u hasovnik
+        <button type="click" class="submit--modal btn">Ubaci u hasovnik</button>
+        <input
+          class="input-field input--remove-one"
+          type="text"
+          name=""
+          id=""
+          placeholder="Ime obroka za izbaciti"
+        />
+        <button type="click" class="remove-one--modal btn">
+          Izbaci iz hasovnika
+        </button>
+        <button type="click" class="remove-all--modal btn">
+          Izbaci sve iz hasovnika
         </button>
       </div>
     </div>

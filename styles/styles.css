@@ -63,6 +63,9 @@ span {
   overflow: hidden;
   opacity: 0.5;
 }
+.hidden {
+  display: none;
+}
 article {
   display: flex;
   white-space: nowrap;
@@ -72,6 +75,7 @@ article {
   font-size: 2rem;
 }
 section {
+  background-color: rgb(68, 175, 202);
   max-height: 0;
 }
 
@@ -89,14 +93,18 @@ section.section__display--on {
 .big-container div {
   cursor: cell;
   display: flex;
-  height: 100px;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100px;
+  /* align-items: center; */
   justify-content: center;
 }
 .big-container div:hover h1 {
   font-size: 5rem;
   transition: 1s;
   color: white;
+}
+div span {
+  font-size: 2rem;
 }
 .big-container__nap {
   background-color: rgb(5, 80, 76);
