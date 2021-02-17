@@ -129,7 +129,10 @@ console.log("Blin, it started the script");
     indexOf = userAddedArticles.indexOf(
       userAddedArticles.find((art) => art.articleName === imeObroka)
     );
-    userAddedArticles.splice(indexOf, 1);
+    if (indexOf === -1) {
+      clearModal();
+      modalOverlay.classList.add("modal--hidden");
+    }
     updateAllArticles();
     updateLocalStorage(userAddedArticles);
     clearModal();

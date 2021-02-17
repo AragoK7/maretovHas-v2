@@ -15,8 +15,16 @@ h1 {
   cursor: cell;
   transition: 1s;
 }
+.big-container__create-has {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
 .animation--fade-in--left {
   animation: showArticlesLeft 2s;
+}
+.top_border {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 @keyframes showArticlesLeft {
   from {
@@ -30,11 +38,11 @@ h1 {
 }
 span {
   cursor: default;
-  color: indigo;
-  transition: 1s;
+  /* color: indigo; */
+  /* transition: 1s; */
 }
 .animation--fade-in--right {
-  animation: showArticlesRight 2s;
+  animation: showArticlesRight 1.5s;
 }
 @keyframes showArticlesRight {
   from {
@@ -48,7 +56,7 @@ span {
   }
 }
 .animation--fade-in--bottom {
-  animation: showArticlesBottom 2s;
+  animation: showArticlesBottom 1.5s;
   animation-timing-function: ease-in-out;
 }
 @keyframes showArticlesBottom {
@@ -86,9 +94,10 @@ section.section__display--on {
 }
 
 .big-container {
-  background-color: indianred;
   width: 800px;
   margin: auto;
+
+  background-color: indigo;
 }
 .big-container div {
   cursor: cell;
@@ -123,7 +132,7 @@ div span {
   background-color: rgb(5, 80, 76);
 }
 .big-container div:hover {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .modal--overlay {
