@@ -115,9 +115,11 @@ console.log("Blin, it started the script");
     const artType = modalOverlay.querySelector(".input--type").value;
     const artName = modalOverlay.querySelector(".input--name").value;
     const artPrice = modalOverlay.querySelector(".input--price").value;
-    if (!artName || !artPrice) clearModal();
-    else {
-      createNewObject(artType, artName, Number(artPrice), true);
+    const artPriceNumber = Number(artPrice);
+    if (!artName || !artPrice || isNaN(artPriceNumber)) {
+      clearModal();
+    } else {
+      createNewObject(artType, artName, artPriceNumber, true);
       clearModal();
     }
     modalOverlay.classList.add("modal--hidden");
